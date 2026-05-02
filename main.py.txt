@@ -1,0 +1,39 @@
+class Cliente(EntidadBase):
+    def __init__(self, cedula, nombre, email):
+        super().__init__(cedula)
+        if not str(cedula).isdigit():
+            raise DatoInvalidoError(f"La cédula {cedula} debe ser numérica.")
+        self.__nombre = nombre  # Encapsulamiento privado
+        self.__email = email
+
+    def __str__(self):
+        return f"Cliente: {self.__nombre} (ID: {self.id_entidad})"
+
+# --- Servicios Especializados ---
+
+class ReservaSala(Servicio):
+    def calcular_costo(self, horas=1, descuento=0):
+        # Simulación de sobrecarga mediante parámetros opcionales
+        total = (self.costo_base * horas) - descuento
+        return max(total, 0)
+
+    def mostrar_detalle(self):
+        return f"Servicio: Reserva de Sala - {self.nombre}"
+
+class AlquilerEquipo(Servicio):
+    def calcular_costo(self, dias=1, seguro=True):
+        costo = self.costo_base * dias
+        if seguro:
+            costo += (costo * 0.10)  # 10% de seguro
+        return costo
+
+    def mostrar_detalle(self):
+        return f"Servicio: Alquiler de Equipo - {self.nombre}"
+
+class AsesoriaEspecializada(Servicio):
+    def calcular_costo(self, horas=1, es_remoto=False):
+        costo = self.costo_base * horas
+        return costo if es_remoto else costo + 50  # Cargo por desplazamiento
+    
+    def mostrar_detalle(self):
+        return f"Servicio: Asesoría - {self.nombre}"
